@@ -8,27 +8,27 @@ export class CommentsController {
   constructor(private readonly commentsService: CommentsService) {}
 
   @Post()
-  create(@Body() createCommentDto: CreateCommentDto) {
+  create(@Body() createCommentDto: CreateCommentDto):Promise<string> {
     return this.commentsService.create(createCommentDto);
   }
 
   @Get()
-  findAll() {
+  findAll():Promise<string|Object[]> {
     return this.commentsService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.commentsService.findOne(+id);
+  findOne(@Param('id') id: string):Promise<string|Object> {
+    return this.commentsService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCommentDto: UpdateCommentDto) {
-    return this.commentsService.update(+id, updateCommentDto);
+  update(@Param('id') id: string, @Body() updateCommentDto: UpdateCommentDto):Promise<string> {
+    return this.commentsService.update(id, updateCommentDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.commentsService.remove(+id);
+  remove(@Param('id') id: string):Promise<string> {
+    return this.commentsService.remove(id);
   }
 }
