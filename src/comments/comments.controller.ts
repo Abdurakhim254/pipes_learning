@@ -1,7 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, BadRequestException } from '@nestjs/common';
 import { CommentsService } from './comments.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
+import { BadrequestException } from 'src/exception/bad.exception';
+
 
 @Controller('comments')
 export class CommentsController {
@@ -9,26 +11,51 @@ export class CommentsController {
 
   @Post()
   create(@Body() createCommentDto: CreateCommentDto):Promise<string> {
-    return this.commentsService.create(createCommentDto);
-  }
+try {
+      return this.commentsService.create(createCommentDto);
+  
+} catch (error) {
+  throw new BadrequestException(error.message,401)
+
+}  }
 
   @Get()
   findAll():Promise<string|Object[]> {
-    return this.commentsService.findAll();
-  }
+try {
+      return this.commentsService.findAll();
+  
+} catch (error) {
+  throw new BadrequestException(error.message,401)
+
+}  }
 
   @Get(':id')
   findOne(@Param('id') id: string):Promise<string|Object> {
-    return this.commentsService.findOne(id);
-  }
+try {
+      return this.commentsService.findOne(id);
+  
+} catch (error) {
+  throw new BadrequestException(error.message,401)
+
+}  }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateCommentDto: UpdateCommentDto):Promise<string> {
-    return this.commentsService.update(id, updateCommentDto);
-  }
+try {
+      return this.commentsService.update(id, updateCommentDto);
+  
+} catch (error) {
+  throw new BadrequestException(error.message,401)
+
+}  }
 
   @Delete(':id')
   remove(@Param('id') id: string):Promise<string> {
-    return this.commentsService.remove(id);
-  }
+try {
+      return this.commentsService.remove(id);
+  
+} catch (error) {
+  throw new BadrequestException(error.message,401)
+
+}  }
 }
