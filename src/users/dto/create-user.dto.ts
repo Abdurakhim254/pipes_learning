@@ -23,6 +23,10 @@ export class CreateUserDto {
     email:string
     @IsString()
     @IsNotEmpty()
+    @MinLength(3)
+    role:string
+    @IsString()
+    @IsNotEmpty()
     @MinLength(8)
     password:string
     @IsNumber()

@@ -1,14 +1,16 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, BadRequestException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete,UseGuards } from '@nestjs/common';
 import { CommentsService } from './comments.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
 import { BadrequestException } from 'src/exception/bad.exception';
+import { AuthGuard } from 'src/Guards/authguard';
 
 
 @Controller('comments')
 export class CommentsController {
   constructor(private readonly commentsService: CommentsService) {}
-
+  
+  @UseGuards(AuthGuard)
   @Post()
   create(@Body() createCommentDto: CreateCommentDto):Promise<string> {
 try {
@@ -38,8 +40,9 @@ try {
   throw new BadrequestException(error.message,401)
 
 }  }
-
-  @Patch(':id')
+  
+  @UseGuards(AuthGuard)
+  @Put(':id')
   update(@Param('id') id: string, @Body() updateCommentDto: UpdateCommentDto):Promise<string> {
 try {
       return this.commentsService.update(id, updateCommentDto);
@@ -49,6 +52,7 @@ try {
 
 }  }
 
+  @UseGuards(AuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string):Promise<string> {
 try {

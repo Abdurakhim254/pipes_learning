@@ -4,6 +4,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import {User} from "../schema/user.schema"
 import { InjectModel } from '@nestjs/mongoose';
 import {Model} from "mongoose"
+import { JwtService } from '@nestjs/jwt';
 // export type user={
 //   first_name:string,
 //   last_name:string,
@@ -13,16 +14,30 @@ import {Model} from "mongoose"
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectModel(User.name) private usermodel:Model<User>){
+  constructor(@InjectModel(User.name) private usermodel:Model<User>,
+  private jwtService: JwtService
+  )
+  {
   }
   async create(createUserDto:CreateUserDto ) {
     try {
      const result=await this.usermodel.findOne({email:createUserDto.email})
+     if(!createUserDto.role){
+      createUserDto.role='user'
+     }
+     const roles=['admin','superadmin','user']
+     if(!roles.includes(createUserDto.role)){
+        return "Role xato kiritlgan"
+     }
+     const payload={sub:createUserDto.email,role:createUserDto.role}
      if(!result){
       const res=this.usermodel.create(createUserDto);
       (await res).save()
-      return "Malumot yozildi" 
+      return {msg:"Malumot yozildi",
+      accessToken:await this.jwtService.signAsync(payload)
+      } 
      }
+     
      return "Bu foydalanuvchi allaqachon ro'yxatdan o'tgan"
     } catch (error) {
       return error.message

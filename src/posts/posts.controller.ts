@@ -1,13 +1,15 @@
-import { Controller, Get, Post, Body, Param, Delete, Put, BadRequestException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Put, BadRequestException, UseGuards } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { BadrequestException } from 'src/exception/bad.exception';
+import { AuthGuard } from 'src/Guards/authguard';
 
 @Controller('posts')
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
+  @UseGuards(AuthGuard)
   @Post()
   create(@Body() createPostDto: CreatePostDto) :Promise<string>{
 try {
@@ -36,6 +38,7 @@ try {
 
 }  }
 
+  @UseGuards(AuthGuard)
   @Put(':id')
   update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
 try {
@@ -46,6 +49,7 @@ try {
 
 }  }
 
+  @UseGuards(AuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string):Promise<string> {
 try {

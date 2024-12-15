@@ -1,17 +1,19 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Put, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { BadrequestException } from 'src/exception/bad.exception';
+import { AuthGuard } from 'src/Guards/authguard';
 
 
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService,
+    ) {}
 
   @Post()
-  create(@Body() createUserDto:CreateUserDto):Promise<string> {
+  register(@Body() createUserDto:CreateUserDto):Promise<string> {
     try {
       return this.usersService.create(createUserDto);
     } catch (error) {
@@ -37,6 +39,7 @@ try {
   throw new BadrequestException(error.message,401)
 }  }
 
+  @UseGuards(AuthGuard)
   @Put(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) :Promise<string>{
 try {
@@ -46,7 +49,7 @@ try {
   throw new BadrequestException(error.message,401)
 
 }  }
-
+  @UseGuards(AuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
 try {
