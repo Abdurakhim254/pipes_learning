@@ -4,7 +4,7 @@ import { UUID } from 'crypto';
 import { HydratedDocument } from 'mongoose';
 import * as mongoose from 'mongoose';
 
-export type postDoecument = HydratedDocument<Comment>;
+export type postDocument = HydratedDocument<Comment>;
 
 @Schema()
 export class Comment {

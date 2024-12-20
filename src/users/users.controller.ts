@@ -1,9 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Put, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Put, UseGuards, UseInterceptors } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { BadrequestException } from 'src/exception/bad.exception';
 import { AuthGuard } from 'src/Guards/authguard';
+import { UserInterceptor } from 'src/user/user.interceptor';
 
 
 
@@ -13,6 +14,7 @@ export class UsersController {
     ) {}
 
   @Post()
+  @UseInterceptors(UserInterceptor)
   register(@Body() createUserDto:CreateUserDto):Promise<string> {
     try {
       return this.usersService.create(createUserDto);
